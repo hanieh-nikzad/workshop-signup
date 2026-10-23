@@ -1,3 +1,41 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 
-# Create your views here.
+from .forms import RegistrationForm
+from .models import Registration, Workshop
+from .services import AlreadyRegistered, register
+
+Status = Registration.Status
+
+
+def workshop_detail(request, pk):
+    workshop = get_object_or_404(Workshop, pk=pk)
+
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                reg = register(
+                    workshop.id,
+                    form.cleaned_data["name"],
+                    form.cleaned_data["email"],
+                )
+            except AlreadyRegistered:
+                form.add_error("email", "با این ایمیل قبلاً برای این کارگاه ثبت‌نام شده است.")
+            else:
+                if reg.status == Status.CONFIRMED:
+                    messages.success(request, "ثبت‌نام شما تأیید شد.")
+                else:
+                    messages.warning(request, "ظرفیت پر است؛ شما در لیست انتظار قرار گرفتید.")
+                return redirect("workshop_detail", pk=workshop.pk)
+    else:
+        form = RegistrationForm()
+
+    confirmed = workshop.registrations.filter(status=Status.CONFIRMED).count()
+    context = {
+        "workshop": workshop,
+        "form": form,
+        "confirmed": confirmed,
+        "remaining": max(workshop.capacity - confirmed, 0),
+    }
+    return render(request, "workshops/workshop_detail.html", context)
