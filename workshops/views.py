@@ -27,7 +27,7 @@ def workshop_detail(request, pk):
                     messages.success(request, "ثبت‌نام شما تأیید شد.")
                 else:
                     messages.warning(request, "ظرفیت پر است؛ شما در لیست انتظار قرار گرفتید.")
-                return redirect("workshop_detail", pk=workshop.pk)
+                return redirect("registration_status", token=reg.token)
     else:
         form = RegistrationForm()
 
@@ -39,3 +39,21 @@ def workshop_detail(request, pk):
         "remaining": max(workshop.capacity - confirmed, 0),
     }
     return render(request, "workshops/workshop_detail.html", context)
+
+
+def registration_status(request, token):
+    reg = get_object_or_404(Registration, token=token)
+
+    position = None
+    if reg.status == Status.WAITLIST:
+        position = Registration.objects.filter(
+            workshop=reg.workshop,
+            status=Status.WAITLIST,
+            created_at__lt=reg.created_at,
+        ).count() + 1
+
+    return render(request, "workshops/registration_status.html", {
+        "reg": reg,
+        "workshop": reg.workshop,
+        "position": position,
+    })

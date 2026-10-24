@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>وضعیت ثبت‌نام</title>
+</head>
+<body>
+  <h1>{{ workshop.title }}</h1>
+  <p>سلام {{ reg.name }}</p>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if reg.status == "confirmed" %}
+    <p>ثبت‌نام شما تأیید شده است.</p>
+  {% elif reg.status == "waitlist" %}
+    <p>شما در لیست انتظار هستید. جایگاه شما: نفر {{ position }}</p>
+  {% else %}
+    <p>ثبت‌نام شما لغو شده است.</p>
+  {% endif %}
+
+  <p>این لینک را نگه دارید؛ برای دیدن وضعیت و انصراف لازم است.</p>
+</body>
+</html>
