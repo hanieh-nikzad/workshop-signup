@@ -36,3 +36,31 @@ def register(workshop_id, name, email):
         return Registration.objects.create(
             workshop=workshop, name=name, email=email, status=status
         )
+
+
+def cancel(token):
+    with transaction.atomic():
+        reg = Registration.objects.get(token=token)
+        Workshop.objects.select_for_update().get(pk=reg.workshop_id)
+        reg.refresh_from_db()
+
+        if reg.status == Status.CANCELLED:
+            return reg
+
+        was_confirmed = reg.status == Status.CONFIRMED
+        reg.status = Status.CANCELLED
+        reg.save()
+
+        if was_confirmed:
+            next_in_line = (
+                Registration.objects.filter(
+                    workshop_id=reg.workshop_id, status=Status.WAITLIST
+                )
+                .order_by("created_at", "id")
+                .first()
+            )
+            if next_in_line:
+                next_in_line.status = Status.CONFIRMED
+                next_in_line.save()
+
+        return reg

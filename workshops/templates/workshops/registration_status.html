@@ -25,6 +25,14 @@
     <p>ثبت‌نام شما لغو شده است.</p>
   {% endif %}
 
+  {% if reg.status != "cancelled" %}
+    <form method="post" action="{% url 'cancel_registration' reg.token %}"
+          onsubmit="return confirm('مطمئنی می‌خوای انصراف بدی؟')">
+      {% csrf_token %}
+      <button type="submit">انصراف از ثبت‌نام</button>
+    </form>
+  {% endif %}
+
   <p>این لینک را نگه دارید؛ برای دیدن وضعیت و انصراف لازم است.</p>
 </body>
 </html>

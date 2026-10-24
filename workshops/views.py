@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RegistrationForm
 from .models import Registration, Workshop
-from .services import AlreadyRegistered, register
+from .services import AlreadyRegistered,cancel ,register
 
 Status = Registration.Status
 
@@ -57,3 +57,11 @@ def registration_status(request, token):
         "workshop": reg.workshop,
         "position": position,
     })
+
+
+def cancel_registration(request, token):
+    reg = get_object_or_404(Registration, token=token)
+    if request.method == "POST":
+        cancel(reg.token)
+        messages.success(request, "ثبت‌نام شما لغو شد.")
+    return redirect("registration_status", token=reg.token)
