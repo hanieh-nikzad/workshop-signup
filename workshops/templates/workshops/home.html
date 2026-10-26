@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ثبت‌نام کارگاه</title>
+</head>
+<body>
+  <h1>کارگاه‌ها</h1>
+  <ul>
+    {% for w in workshops %}
+      <li>
+        <a href="{% url 'workshop_detail' w.pk %}">{{ w.title }}</a>
+        — {{ w.date|date:"Y/m/d H:i" }}
+        — تأییدشده: {{ w.confirmed }} از {{ w.capacity }}
+      </li>
+    {% empty %}
+      <li>هنوز کارگاهی ثبت نشده است.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

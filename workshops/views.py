@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import RegistrationForm
 from .models import Registration, Workshop
 from .services import AlreadyRegistered,cancel ,register
+from django.db.models import Count, Q
 
 Status = Registration.Status
 
@@ -65,3 +66,21 @@ def cancel_registration(request, token):
         cancel(reg.token)
         messages.success(request, "ثبت‌نام شما لغو شد.")
     return redirect("registration_status", token=reg.token)
+
+def home(request):
+    workshops = Workshop.objects.annotate(
+        confirmed=Count("registrations", filter=Q(registrations__status=Status.CONFIRMED))
+    ).order_by("date")
+    return render(request, "workshops/home.html", {"workshops": workshops})
+
+
+def workshop_manage(request, token):
+    workshop = get_object_or_404(Workshop, admin_token=token)
+    regs = workshop.registrations.all()
+    context = {
+        "workshop": workshop,
+        "confirmed": regs.filter(status=Status.CONFIRMED),
+        "waitlist": regs.filter(status=Status.WAITLIST),
+        "cancelled": regs.filter(status=Status.CANCELLED),
+    }
+    return render(request, "workshops/workshop_manage.html", context)

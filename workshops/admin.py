@@ -1,8 +1,11 @@
 from django.contrib import admin
-from .models import Workshop, Registration
+from .models import Registration, Workshop
 
 
-admin.site.register(Workshop)
+@admin.register(Workshop)
+class WorkshopAdmin(admin.ModelAdmin):
+    list_display = ("title", "date", "capacity")
+    readonly_fields = ("admin_token",)
 
 
 @admin.register(Registration)
