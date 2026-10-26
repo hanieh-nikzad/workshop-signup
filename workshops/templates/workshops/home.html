@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ثبت‌نام کارگاه</title>
-</head>
-<body>
+{% extends "workshops/base.html" %}
+{% block title %}کارگاه‌ها{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="welcome">خوش آمدید</p>
   <h1>کارگاه‌ها</h1>
-  <ul>
-    {% for w in workshops %}
-      <li>
-        <a href="{% url 'workshop_detail' w.pk %}">{{ w.title }}</a>
-        — {{ w.date|date:"Y/m/d H:i" }}
-        — تأییدشده: {{ w.confirmed }} از {{ w.capacity }}
-      </li>
-    {% empty %}
-      <li>هنوز کارگاهی ثبت نشده است.</li>
-    {% endfor %}
-  </ul>
-</body>
-</html>
+  <p class="desc">یکی از کارگاه‌ها را انتخاب کنید و ثبت‌نام کنید.</p>
+</section>
+
+{% for w in workshops %}
+  <a class="card workshop-link" href="{% url 'workshop_detail' w.pk %}">
+    <h2>{{ w.title }}</h2>
+    <p class="desc">{{ w.date|date:"Y/m/d" }} — ساعت {{ w.date|date:"H:i" }}</p>
+    <p class="desc">تأییدشده: {{ w.confirmed }} از {{ w.capacity }}</p>
+  </a>
+{% empty %}
+  <div class="card">هنوز کارگاهی ثبت نشده است.</div>
+{% endfor %}
+{% endblock %}

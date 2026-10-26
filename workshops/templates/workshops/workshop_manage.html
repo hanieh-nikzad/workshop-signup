@@ -1,0 +1,30 @@
+{% extends "workshops/base.html" %}
+{% block title %}مدیریت کارگاه{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="welcome">صفحه مدیریت برگزارکننده</p>
+  <h1>{{ workshop.title }}</h1>
+  <p class="desc">ظرفیت: {{ workshop.capacity }} — تأییدشده: {{ confirmed|length }} — در صف: {{ waitlist|length }}</p>
+</section>
+
+<section class="card">
+  <h2>تأییدشده‌ها</h2>
+  <ol class="plain">
+    {% for r in confirmed %}<li>{{ r.name }} ({{ r.email }})</li>{% empty %}<li>—</li>{% endfor %}
+  </ol>
+</section>
+
+<section class="card">
+  <h2>لیست انتظار (به ترتیب ثبت‌نام)</h2>
+  <ol class="plain">
+    {% for r in waitlist %}<li>{{ r.name }} ({{ r.email }})</li>{% empty %}<li>—</li>{% endfor %}
+  </ol>
+</section>
+
+<section class="card">
+  <h2>لغوشده‌ها</h2>
+  <ul class="plain">
+    {% for r in cancelled %}<li>{{ r.name }} ({{ r.email }})</li>{% empty %}<li>—</li>{% endfor %}
+  </ul>
+</section>
+{% endblock %}

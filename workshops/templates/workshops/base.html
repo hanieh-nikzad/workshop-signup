@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ثبت‌نام کارگاه{% endblock %}</title>
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --ok: #166534;
+      --ok-bg: #dcfce7;
+      --warn: #92400e;
+      --warn-bg: #fef3c7;
+      --err: #991b1b;
+      --err-bg: #fee2e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Vazirmatn, Tahoma, "Segoe UI", Arial, sans-serif;
+      line-height: 1.8;
+    }
+    .topbar { background: var(--primary); padding: 14px 20px; }
+    .topbar a { color: #fff; text-decoration: none; font-weight: bold; font-size: 18px; }
+    .container { max-width: 760px; margin: 24px auto; padding: 0 16px; }
+    .hero { margin-bottom: 16px; }
+    .welcome { color: var(--primary); font-weight: bold; margin: 0; }
+    h1 { margin: 4px 0 8px; font-size: 26px; }
+    h2 { font-size: 18px; margin: 0 0 8px; }
+    .desc { color: var(--muted); margin: 0 0 8px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .info-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .info-box .label { display: block; color: var(--muted); font-size: 13px; }
+    .info-box .value { display: block; font-weight: bold; font-size: 17px; margin-top: 4px; }
+    .ok { color: var(--ok); }
+    .full { color: var(--warn); }
+    .msg { padding: 12px 14px; border-radius: 10px; margin-bottom: 12px; }
+    .msg.success { background: var(--ok-bg); color: var(--ok); }
+    .msg.warning { background: var(--warn-bg); color: var(--warn); }
+    .msg.error { background: var(--err-bg); color: var(--err); }
+    form p { margin: 0 0 12px; }
+    label { display: block; font-weight: bold; margin-bottom: 4px; }
+    input[type=text], input[type=email] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+    .errorlist { list-style: none; margin: 0 0 6px; padding: 0; color: var(--err); font-size: 14px; }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button:hover { background: var(--primary-dark); }
+    button.danger { background: #b91c1c; }
+    .status-big { font-size: 20px; font-weight: bold; margin: 0 0 6px; }
+    .workshop-link { display: block; text-decoration: none; color: inherit; }
+    .workshop-link:hover { border-color: var(--primary); }
+    .workshop-link h2 { color: var(--primary-dark); }
+    ul.plain, ol.plain { margin: 0; padding-right: 22px; }
+    ul.plain li, ol.plain li { padding: 4px 0; }
+    a { color: var(--primary-dark); }
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar"><a href="{% url 'home' %}">ثبت‌نام کارگاه</a></header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

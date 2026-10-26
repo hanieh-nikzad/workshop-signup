@@ -1,32 +1,47 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ workshop.title }}</title>
-</head>
-<body>
+{% extends "workshops/base.html" %}
+{% block title %}{{ workshop.title }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="welcome">به صفحه ثبت‌نام کارگاه خوش آمدید</p>
   <h1>{{ workshop.title }}</h1>
-  <p>{{ workshop.description }}</p>
-  <p>تاریخ: {{ workshop.date|date:"Y/m/d H:i" }}</p>
-  <p>ظرفیت: {{ workshop.capacity }} | تأییدشده: {{ confirmed }} | جای خالی: {{ remaining }}</p>
+  {% if workshop.description %}<p class="desc">{{ workshop.description }}</p>{% endif %}
+</section>
 
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+<section class="info-grid">
+  <div class="info-box">
+    <span class="label">تاریخ</span>
+    <span class="value">{{ workshop.date|date:"Y/m/d" }}</span>
+  </div>
+  <div class="info-box">
+    <span class="label">ساعت</span>
+    <span class="value">{{ workshop.date|date:"H:i" }}</span>
+  </div>
+  <div class="info-box">
+    <span class="label">وضعیت</span>
+    {% if remaining > 0 %}
+      <span class="value ok">ظرفیت دارد ({{ remaining }} جای خالی)</span>
+    {% else %}
+      <span class="value full">ظرفیت تکمیل است</span>
+    {% endif %}
+  </div>
+</section>
 
+{% for message in messages %}
+  <div class="msg {{ message.tags }}">{{ message }}</div>
+{% endfor %}
+
+<section class="card">
+  <h2>ثبت‌نام در کارگاه</h2>
+  <p class="desc">ظرفیت: {{ workshop.capacity }} نفر — تأییدشده: {{ confirmed }}</p>
   {% if remaining == 0 %}
-    <p>ظرفیت پر است. اگر ثبت‌نام کنید در لیست انتظار قرار می‌گیرید.</p>
+    <div class="msg warning">ظرفیت تکمیل است؛ اگر ثبت‌نام کنید در لیست انتظار قرار می‌گیرید.</div>
   {% endif %}
-
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">ثبت‌نام</button>
   </form>
-</body>
-</html>
+</section>
+
+<p><a href="{% url 'home' %}">بازگشت به لیست کارگاه‌ها</a></p>
+{% endblock %}

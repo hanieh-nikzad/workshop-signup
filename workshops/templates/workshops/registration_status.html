@@ -1,38 +1,38 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>وضعیت ثبت‌نام</title>
-</head>
-<body>
+{% extends "workshops/base.html" %}
+{% block title %}وضعیت ثبت‌نام{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="welcome">سلام {{ reg.name }}</p>
   <h1>{{ workshop.title }}</h1>
-  <p>سلام {{ reg.name }}</p>
+  <p class="desc">{{ workshop.date|date:"Y/m/d" }} — ساعت {{ workshop.date|date:"H:i" }}</p>
+</section>
 
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% for message in messages %}
+  <div class="msg {{ message.tags }}">{{ message }}</div>
+{% endfor %}
 
+<section class="card">
   {% if reg.status == "confirmed" %}
-    <p>ثبت‌نام شما تأیید شده است.</p>
+    <p class="status-big ok">ثبت‌نام شما تأیید شده است.</p>
   {% elif reg.status == "waitlist" %}
-    <p>شما در لیست انتظار هستید. جایگاه شما: نفر {{ position }}</p>
+    <p class="status-big full">شما در لیست انتظار هستید. جایگاه شما: نفر {{ position }}</p>
+    <p class="desc">اگر یکی از تأییدشده‌ها انصراف دهد، به‌صورت خودکار تأیید می‌شوید.</p>
   {% else %}
-    <p>ثبت‌نام شما لغو شده است.</p>
+    <p class="status-big">ثبت‌نام شما لغو شده است.</p>
+    <p class="desc"><a href="{% url 'workshop_detail' workshop.pk %}">ثبت‌نام دوباره</a></p>
   {% endif %}
+</section>
 
-  {% if reg.status != "cancelled" %}
-    <form method="post" action="{% url 'cancel_registration' reg.token %}"
-          onsubmit="return confirm('مطمئنی می‌خوای انصراف بدی؟')">
-      {% csrf_token %}
-      <button type="submit">انصراف از ثبت‌نام</button>
-    </form>
-  {% endif %}
+{% if reg.status != "cancelled" %}
+<section class="card">
+  <form method="post" action="{% url 'cancel_registration' reg.token %}"
+        onsubmit="return confirm('مطمئنی می‌خوای انصراف بدی؟')">
+    {% csrf_token %}
+    <button type="submit" class="danger">انصراف از ثبت‌نام</button>
+  </form>
+</section>
+{% endif %}
 
-  <p>این لینک را نگه دارید؛ برای دیدن وضعیت و انصراف لازم است.</p>
-</body>
-</html>
+<p class="desc">این لینک را نگه دارید؛ برای دیدن وضعیت و انصراف لازم است.</p>
+<p><a href="{% url 'home' %}">بازگشت به لیست کارگاه‌ها</a></p>
+{% endblock %}
